@@ -1,6 +1,9 @@
 package part01;
 
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class CommitIds {
 
@@ -28,6 +31,24 @@ public class CommitIds {
      * @return a collection of commit ids
      */
     public Collection<String> getCommitIds(String commitLog) {
+        List<String> lokit = new ArrayList<>();
+        String[] osat = commitLog.split("\\n");
+        
+            if(commitLog.isEmpty()){
+                return lokit;
+            }
+            else{
+                for(int i = 0; i < osat.length; i++){
+                    if(osat[i].startsWith("Commit")){
+                        int aloitus = osat[i].indexOf(" ") + 1;
+                        int lopetus = osat[i].indexOf(" ", aloitus);
+                        String id = osat[i].substring(aloitus, lopetus);
+                        lokit.add(id);
+                    }
+            }
+        }
+        return lokit;
+        
         /*
          * Note that this method must return a Collection<String>. Collection is an
          * interface and you need to return an instance of some class that implements
@@ -38,6 +59,5 @@ public class CommitIds {
          * Note also, that if the given commitLog is empty, you must return an empty
          * collection.
          */
-        return null;
     }
 }
