@@ -1,7 +1,11 @@
 package part02;
 
+
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Contributors {
 
@@ -22,9 +26,24 @@ public class Contributors {
      * @return a collection of contributor usernames from the commit log
      */
     public Collection<String> getContributors(String commitLog) {
+        Set<String> kayttajat = new HashSet<String>();
+        String[] osat = commitLog.split("\\n");
+        if(commitLog.isEmpty()){
+            return kayttajat;
+        }
+        else{
+            for(int i = 0; i < osat.length; i++){
+                    if(osat[i].startsWith("Commit")){
+                        int aloitus = osat[i].indexOf("by ") + 3;
+                        int lopetus = osat[i].indexOf(" ", aloitus);
+                        String kayttajanimi = osat[i].substring(aloitus, lopetus);
+                        kayttajat.add(kayttajanimi);
+                    }
+            }
+        }
+        return kayttajat;  
         // Like in the previous exercise, you need to return an instance of some class
         // that implements the Collection interface. The choice is yours.
-        return null;
     }
 
     /**
@@ -48,6 +67,39 @@ public class Contributors {
      * @return a map containing the commit ids grouped by contributor
      */
     public Map<String, Collection<String>> groupCommitIdsByContributors(String commitLog) {
-        return null;
+        Map<String, Collection<String>> kayttajatJaIdt = new HashMap<String, Collection<String>>();
+        String[] osat = commitLog.split("\\n");
+        
+
+        if(commitLog.isEmpty()){
+            return kayttajatJaIdt;
+        }
+
+        for(int i = 0; i < osat.length; i++){
+            if(osat[i].startsWith("Commit")){
+                        
+
+                        int aloitusId = osat[i].indexOf(" ") + 1;
+                        int lopetusId = osat[i].indexOf(" ", aloitusId);
+                        String id = osat[i].substring(aloitusId, lopetusId);
+
+                        int aloitusKayttaja = osat[i].indexOf("by ") + 3;
+                        int lopetusKayttaja = osat[i].indexOf(" ", aloitusKayttaja);
+                        String kayttajanimi = osat[i].substring(aloitusKayttaja, lopetusKayttaja);
+
+                            if(kayttajatJaIdt.containsKey(kayttajanimi) == false){
+                                HashSet<String> kokoelma = new HashSet<String>();
+                                kokoelma.add(id);
+                                kayttajatJaIdt.put(kayttajanimi, kokoelma);
+                            }
+                            else{
+                                Collection<String> idt = kayttajatJaIdt.get(kayttajanimi);
+                                idt.add(id);
+                            }
+                    }
+                        
+        }
+
+        return kayttajatJaIdt;
     }
 }
